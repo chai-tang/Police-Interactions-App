@@ -1,6 +1,6 @@
-# This is the template we will be modifying for further Assignments. 
+# This App is based on a CI-Python Template created by Dr. Steven Ding
 
-Here's the original template README:
+Here's the original template's README, with a few edits to make it more relevant to this project:
 
 # GitHub Actions CI Template for Selenium+Flask MVC
 
