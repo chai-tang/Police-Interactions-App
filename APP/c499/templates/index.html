@@ -1,0 +1,21 @@
+{% extends 'base.html' %}
+
+{% block header %}
+<h1>{% block title %}Home{% endblock %}</h1>
+{% endblock %}
+
+{% block content %}
+<h4 id='message'>{{message}}</h4>
+<h4 id='welcome_header'>{{welcome_header}}</h4>
+
+<p>PLACEHOLDER TEXT - THIS IS THE HOMEPAGE</p>
+
+<ul>
+    <li><a href="/profile">My Profile</a></li>
+    <li><a href="/report">Report an Incident</a></li>
+    <li><a href="/map">Incident Map</a></li>
+    <li><a href="/about">Info/About</a></li>
+</ul>
+
+<a id="return_link" href='/logout'>Logout</a>
+{% endblock %}

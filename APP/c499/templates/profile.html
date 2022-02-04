@@ -1,0 +1,16 @@
+{% extends 'base.html' %}
+
+{% block header %}
+<h1>{% block title %}Profile{% endblock %}</h1>
+{% endblock %}
+
+{% block content %}
+<p>PLACEHOLDER TEXT - THIS IS THE PROFILE PAGE</p>
+
+<ul>
+    <li><a href="/history">My Report History</a></li>
+    <li><a href="/settings">Settings</a></li>
+</ul>
+
+<a id="return_link" href='/'>Return to Homepage</a>
+{% endblock %}
