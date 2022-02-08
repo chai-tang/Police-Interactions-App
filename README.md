@@ -2,7 +2,7 @@
 
 (Official name TBA)
 
-CISC499 Undergraduate Project developped by Joshua Chai-Tang, Anthony Rios and Aidan Turnbull
+CISC499 Undergraduate Project developed by Joshua Chai-Tang, Anthony Rios and Aidan Turnbull
 
 Supervisor: Catherine Stinson
 
