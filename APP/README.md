@@ -1,6 +1,6 @@
-# This is the template we will be modifying for further Assignments. 
+# This App is based on a CI-Python Template created by Dr. Steven Ding
 
-Here's the original template README:
+Here's the original template's README, with a few edits to make it more relevant to this project:
 
 # GitHub Actions CI Template for Selenium+Flask MVC
 
@@ -22,7 +22,7 @@ To run all the test code:
 ```
 $ pytest
 ```
-You will see your browswer being controlled by the script automatically jumping around to test the website.
+You will see your browser being controlled by the script automatically jumping around to test the website.
 
 
 ## How does it work?
@@ -32,30 +32,34 @@ Folder structure:
 .
 ├── LICENSE
 ├── README.md
-├── .github
-│   └── workflows
-│       └── pythonapp.yml ======> CI workflow for python (trigger test for commits/pull-requests)
 │
 ├── c499
 │   ├── __init__.py.  ==========> we define our flask app instance here
 │   ├── __main__.py   ==========> trigger by 'python -m c499'
 │   ├── backend.py    ==========> defines backend logic
 │   ├── frontend.py   ==========> defines frontend logic
-│   ├── models.py.    ==========> defines all the data models
-│   └── templates
-│       ├── base.html
-│       ├── index.html
-│       ├── login.html
-│       └── register.html
+│   ├── models.py.    ==========> defines all the database models
+│   ├── templates
+│   │   ├── base.html
+│   │   ├── index.html
+│   │   ├── login.html
+│   │   ├── register.html
+│   │   └── (other HTML pages)
+│   └── static
+│       ├── css
+│       │   ├── base.css
+│       │   └── (other CSS files)
+│       └── (more folders for other static files)
+│
 ├── c499_test
 │   ├── __init__.py
-│   ├── backend
 │   ├── conftest.py
+│   ├── backend
+│   │   └── test_get_user.py
 │   ├── frontend
-│   │   ├── test_connection.py
-│   │   └── test_registration.py
+│   │   └── test_login.py
 │   └── integration
-│       └── test_registration.py
+│       └── test_registration_int.py
 └── requirements.txt  ====================> python dependencies, a MUST
 ```
 
@@ -243,10 +247,9 @@ Let's take a look at the file structure:
 │   ├── __init__.py
 │   ├── conftest.py  ===================> defines fixture (run the web server)
 │   ├── frontend                ========> testing the front-end (without backend, using mocking)
-│   │   ├── test_connection.py  ========> testing if we can connect
-│   │   └── test_registration.py ========> testing the login page and home page (without backend, using mocking)
+│   │   └── test_login.py ==============> testing the login page (without backend, using mocking)
 │   └── integration             ========> integration testing (running both frontend and the backend)
-│       └── test_registration.py =======> testing the registration process (actually storing/reading data from database)
+│       └── test_registration_int.py ===> testing the registration process (actually storing/reading data from database)
 ````
 
 conftest.py defines the fixtures for the test cases. These fixtures are resources that are needed to setup and shared between different test cases. In order to test the services and the web interface, we need to run the web server first. If we take a look at what is inside conftest.py (you are not supposed to understand every single line of this part):
