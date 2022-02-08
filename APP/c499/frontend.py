@@ -91,7 +91,7 @@ def login_get():
     # if a message was passed to this function, display that as message. else, display 'Please login'
     passed_message = request.args.get('message')
     if passed_message == None:
-        passed_message = 'Please login'
+        passed_message = 'Sign in to continue'
     return render_template('login.html', message=passed_message)
 
 
@@ -124,7 +124,7 @@ def login_post():
 
     # if login failed, check what the error was and display an appropriate error message
     else:
-        return render_template('login.html', message='email/password combination incorrect')
+        return render_template('login.html', message='Incorrect Email or Password')
 
 
 @app.route('/logout', methods=['GET'])
@@ -138,6 +138,9 @@ def logout():
     # since the user is logged out at this point, this should immediately redirect to /login
     return redirect('/', code=303)
 
+@app.route('/forgot')
+def forgot():
+    return render_template('forgot.html')
 
 def authenticate(inner_function):
     """
@@ -171,7 +174,6 @@ def authenticate(inner_function):
 
     # return the wrapped version of the inner_function:
     return wrapped_inner
-
 
 @app.route('/')
 @authenticate
