@@ -1,0 +1,104 @@
+html, body{
+    background-color: #353535;
+    height:100%;
+    margin:0;
+}
+
+.wrapper{
+    display:flex;
+    flex-direction: column;
+    height:100%;
+}
+
+#message{
+    margin: 8px;
+    text-align: center;
+    color: #D2D7DF;
+}
+
+h1 {
+    margin-left: 16px;
+    margin-right: 16px;
+    margin-top: 64px;
+    margin-bottom: 8px;
+    text-align: center;
+    color: white;
+}
+
+form {
+    max-width: 600px;
+    margin: 0 auto;
+}
+
+.form-group{
+    display:flex;
+    flex-direction: column;
+    margin:16px 16px 32px 16px;
+}
+
+.form-group div {
+    margin-top: 16px;
+    margin-bottom: 8px;;
+    width: 100%;
+    height: 48px;
+    border: 1px solid white;
+    border-radius: 24px;
+    overflow:hidden;
+}
+
+.icon-group img, .icon-group input{
+    display:inline-block;
+}
+
+.icon-group img {
+    width: 24px;
+    height: 24px;
+    vertical-align: middle;
+    opacity: 50%;
+    padding: 0px 0px 0px 16px;
+    filter:invert();
+}
+
+.icon-group input {
+    width:calc(100% - 88px);
+    height: 100%;
+    vertical-align: middle;
+    border: none;
+    padding: 0px 16px 0px 8px;
+    outline:none;
+    background-color: #353535;
+    color: #D2D7DF;
+}
+
+#login-button {
+    border: none;
+}
+
+#login-button input{
+    height: 100%;
+    width: 100%;
+    border: none;
+    border-radius: 32px;
+    font-size: large;
+    background-color: #399E5A;
+    color: white;
+}
+
+
+
+#sub-logins{
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    color: #D2D7DF;
+    text-align: center;
+    height:100%;
+    font-family: Arial, Helvetica, sans-serif;
+}
+#sub-logins a{
+    color: #399E5A;
+    text-decoration: none;
+}
+#sub-logins span{
+    margin-bottom:32px;
+}
