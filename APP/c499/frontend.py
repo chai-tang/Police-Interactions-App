@@ -46,18 +46,18 @@ def register_post():
 
     # check that both passwords match
     if password != password2:
-        message="passwords do not match"
+        message="Passwords do not match"
         error = True
 
     # check that the forms all match the required patterns using regular expressions
     elif not(emailPattern.match(email)) or not(lengthPattern.match(email)):
-        message="invalid email"
+        message="Please enter a valid email address"
         error = True
     elif not(passwordPattern.match(password)):
-        message="password must be at least 6 characters long"
+        message="Your password must be at least 6 characters long"
         error = True
     elif not(usernamePattern.match(name)):
-        message="username must be alphanumeric, no more than 18 characters long"
+        message="Your username must be alphanumeric, no more than 18 characters long"
         error = True
 
     # if all forms are correct, attempt to register the user
@@ -65,10 +65,10 @@ def register_post():
         user = bn.get_user(email)
         # if the user already exists, send an error message
         if user:
-            return render_template('register.html', message="this email has been ALREADY used")
+            return render_template('register.html', message="That email has already been registered")
         # if the registration fails for some reason (register_user doesn't return none) send an error message
         elif bn.register_user(email, name, password, password2) != None:
-            return render_template('register.html', message="failed to register new user, please try again")
+            return render_template('register.html', message="Failed to register new user, please try again")
         # if no errors occur, set balance to 5000
         else:
             message = "Registration successful, please login now"
@@ -219,4 +219,4 @@ def settings(user):
 @app.errorhandler(404)
 def other_requests(error):
     # returns a 404 error for any other requests
-    return render_template('404.html', message='404 ERROR: The requested URL was not found on the server.'), 404
+    return render_template('404.html', message='404 ERROR: This page does not exist!'), 404
