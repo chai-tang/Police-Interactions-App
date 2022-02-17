@@ -1,21 +1,38 @@
 {% extends 'base.html' %}
 
+
+
 {% block header %}
 <h1>{% block title %}Home{% endblock %}</h1>
 {% endblock %}
 
 {% block content %}
-<h4 id='message'>{{message}}</h4>
-<h4 id='welcome_header'>{{welcome_header}}</h4>
+<link rel="stylesheet" href="{{ url_for('static', filename='css/base2.css') }}">
 
-<p>PLACEHOLDER TEXT - THIS IS THE HOMEPAGE</p>
+<body>
+    <header>
+        <h1>Police Interaction App</h1>
+        <nav>
+            <ul class="header_bar">
+                <li><a href="/about">About</a></li>
+                <li><a href="/map">Map</a></li>
+                <li><a href="/report">Incidents</a></li>
+            </ul>
+        </nav>
+        <a class="login_button" href="/profile"><button>Profile</button></a>
+    </header>
+    <h4 id='message'>{{message}}</h4>
+    <h4 id='welcome_header'>{{welcome_header}}</h4>
 
-<ul>
-    <li><a href="/profile">My Profile</a></li>
-    <li><a href="/report">Report an Incident</a></li>
-    <li><a href="/map">Incident Map</a></li>
-    <li><a href="/about">Info/About</a></li>
-</ul>
+    <h2>Recent Interactions</h2>
+    <p>
+        <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d2859.115544677309!2d-76.49733524871066!3d44.22527947900344!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x4cd2ab0fccd925e9%3A0x268a8a4f5c257211!2sQueen&#39;s%20University!5e0!3m2!1sen!2sca!4v1644938548144!5m2!1sen!2sca" width="600" height="450" style="border:5;" allowfullscreen="" loading="lazy"></iframe>
+    </p>
+    <h3><button>Report</button></h3>
+    <p>
+        <a class="logout" id="return_link" href='/logout'><button>Logout</button></a>
+    </p>
+</body>
 
-<a id="return_link" href='/logout'>Logout</a>
+
 {% endblock %}
