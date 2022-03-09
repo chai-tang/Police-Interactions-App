@@ -1,6 +1,7 @@
-from c499.models import db, User
+from c499.models import db, User, IncidentReport
 from werkzeug.security import generate_password_hash, check_password_hash
-import datetime
+from sqlalchemy import desc, func
+from datetime import datetime
 
 """
 This file defines all backend logic that interacts with database and other services
@@ -47,3 +48,28 @@ def register_user(email, name, password, password2):
     db.session.add(new_user)
     db.session.commit()
     return None
+
+def upload_report(user,description,longitude,latitude):
+    """
+    Uploads a user incident report to the database
+    :param user: the user making the report
+    :param description: the user's text description of the incident
+    :param longitude: the longitude of the incident's location
+    :param latitude: the latitude of the incident's location
+    :return: an error message if there is any, or None if the report upload succeeds
+    """
+
+    incident=IncidentReport(user_id=user.id,description=description,longitude=longitude,latitude=latitude,date_time=datetime.now())
+    db.session.add(incident)
+    db.session.commit()
+    return None
+
+def get_latest_report_id():
+    """
+    Retrieves the current highest report ID
+    """
+    highest_id = db.session.query(func.max(IncidentReport.id)).scalar()
+    if (highest_id) != None:
+        return highest_id
+    else:
+        return 0

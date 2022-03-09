@@ -20,7 +20,18 @@ class User(db.Model):
     email = db.Column(db.String(100), unique=True)
     password = db.Column(db.String(100))
     name = db.Column(db.String(1000))
-    
+
+class IncidentReport(db.Model):
+    """
+    A model that defines the sql table for a user submitted incident report
+    """
+    id = db.Column(db.Integer, primary_key=True) # unique incident ID
+    user_id = db.Column(db.Integer) # user ID of the whoever submitted the report
+    latitude = db.Column(db.Float) 
+    longitude = db.Column(db.Float) 
+    date_time = db.Column(db.DateTime)    
+    description = db.Column(db.Text) 
+
 # it creates all the SQL tables if they do not exist
 with app.app_context():
     db.create_all()

@@ -1,10 +1,13 @@
 from flask import render_template, request, session, redirect, url_for
+from flask_googlemaps import GoogleMaps, Map, get_coordinates, get_address
+from werkzeug.utils import secure_filename
 from functools import wraps
 from c499 import app
 import c499.backend as bn
 import re
 import datetime
 import sys
+import os
 
 """
 This file defines the front-end part of the service.
@@ -76,8 +79,7 @@ def register_post():
         return redirect(url_for('login_get', message=message))
 
     # otherwise, display the error message
-    else:
-        return render_template('register.html', message=message)
+    return render_template('register.html', message=message)
 
 
 
@@ -123,8 +125,7 @@ def login_post():
         return redirect('/', code=303)
 
     # if login failed, check what the error was and display an appropriate error message
-    else:
-        return render_template('login.html', message='Incorrect Email or Password')
+    return render_template('login.html', message='Incorrect Email or Password')
 
 
 @app.route('/logout', methods=['GET'])
@@ -191,10 +192,67 @@ def home(user):
 def profile(user):
     return render_template('profile.html', user=user)
 
-@app.route('/report')
+# function to verify that files are of the allowed extensions
+def allowed_file(filename):
+    ALLOWED_EXTENSIONS = {'png', 'jpg', 'jpeg', 'mp4'}
+    return '.' in filename and \
+           filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
+
+@app.route('/report', methods=['POST','GET'])
 @authenticate
 def report(user):
-    return render_template('report.html', user=user)
+     
+    message = 'Upload your incident details here'
+
+    if request.method == 'POST':
+        # get the user's form inputs
+        description = request.form.get('description')
+        latitude = request.form.get('latitude')
+        longitude = request.form.get('longitude')
+
+        valid = True
+        # verify that the form inputs are valid
+        # convert the long/lat into floats
+        if longitude != None and latitude != None:
+            try:
+                longitude = float(longitude)
+                latitude = float(latitude)
+            except ValueError:
+                valid = False
+                message = "Error: Invalid longitude and/or latitude"
+        else:
+            valid = False
+            message = "Error: Invalid longitude and/or latitude"
+        
+        # verify and upload the files
+        files = request.files.getlist('files')
+        report_id = bn.get_latest_report_id() + 1
+        filecount = 0
+        for file in files:
+            if file and allowed_file(file.filename) and file.filename != '':
+                # I'm not exactly sure what secure_filename does but everyone says
+                # it's safest to use it, so here it is
+                filename = secure_filename(file.filename)
+
+                # for organization purposes, all files uploaded get renamed before they're saved.
+                # user files are saved to the user_uploads folder.
+                # the naming convention is [REPORT_ID]-[FILE_NUMBER].extension
+                # ex. If report number 43 uploads two png's and one jpeg, then the filenames will be:
+                # 43-0.png 43-1.png 43-2.jpeg
+                extension = filename.split('.')[-1]
+                filename = str(report_id)+"-"+str(filecount)+"."+extension
+                file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
+                filecount += 1
+            else:
+                valid = False
+                message = "Error: One or more of your files failed to upload."
+
+         # if all inputs are valid, upload the report to the database
+        if valid:
+            bn.upload_report(user,description,longitude,latitude)
+            message = "Report uploaded successfully"
+    
+    return render_template('report.html', user=user, message=message)
 
 @app.route('/map')
 @authenticate
@@ -220,3 +278,4 @@ def settings(user):
 def other_requests(error):
     # returns a 404 error for any other requests
     return render_template('404.html', message='404 ERROR: This page does not exist!'), 404
+
