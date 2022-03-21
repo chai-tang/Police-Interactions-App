@@ -31,6 +31,7 @@ class IncidentReport(db.Model):
     longitude = db.Column(db.Float) 
     date_time = db.Column(db.DateTime)    
     description = db.Column(db.Text) 
+    filenames = db.Column(db.String)
 
 # it creates all the SQL tables if they do not exist
 with app.app_context():

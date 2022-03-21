@@ -1,5 +1,4 @@
-from flask import render_template, request, session, redirect, url_for
-from flask_googlemaps import GoogleMaps, Map, get_coordinates, get_address
+from flask import render_template, request, session, redirect, url_for, send_from_directory
 from werkzeug.utils import secure_filename
 from functools import wraps
 from c499 import app
@@ -202,7 +201,7 @@ def allowed_file(filename):
 @authenticate
 def report(user):
      
-    message = 'Upload your incident details here'
+    message = 'Upload your incident details below'
 
     if request.method == 'POST':
         # get the user's form inputs
@@ -228,6 +227,7 @@ def report(user):
         files = request.files.getlist('files')
         report_id = bn.get_latest_report_id() + 1
         filecount = 0
+        filenames = []
         for file in files:
             if file and allowed_file(file.filename) and file.filename != '':
                 # I'm not exactly sure what secure_filename does but everyone says
@@ -243,13 +243,17 @@ def report(user):
                 filename = str(report_id)+"-"+str(filecount)+"."+extension
                 file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
                 filecount += 1
+                filenames.append(filename)
             else:
                 valid = False
                 message = "Error: One or more of your files failed to upload."
 
          # if all inputs are valid, upload the report to the database
         if valid:
-            bn.upload_report(user,description,longitude,latitude)
+            filenamestr = ""
+            for file in filenames:
+                filenamestr = filenamestr + file + ','
+            bn.upload_report(user,description,longitude,latitude,filenamestr)
             message = "Report uploaded successfully"
     
     return render_template('report.html', user=user, message=message)
@@ -257,7 +261,22 @@ def report(user):
 @app.route('/map')
 @authenticate
 def map(user):
-    return render_template('map.html', user=user)
+    message = "View all incident reports below"
+
+    all_reports = bn.get_all_reports()
+
+    # compile the filenames into lists, then put those lists into a list
+    # each subarray has index equal to the report id that uploaded it
+    all_filenames = []
+    for report in all_reports:
+        filenames = report.filenames.split(',')[0:-1]
+        all_filenames.append(filenames)
+
+    return render_template('map.html', user=user, message=message, all_reports=all_reports, all_filenames=all_filenames)
+
+@app.route('/uploads/<path:filename>')
+def download_file(filename):
+    return send_from_directory(app.config["UPLOAD_FOLDER"], filename)
 
 @app.route('/about')
 @authenticate

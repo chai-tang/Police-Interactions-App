@@ -49,17 +49,18 @@ def register_user(email, name, password, password2):
     db.session.commit()
     return None
 
-def upload_report(user,description,longitude,latitude):
+def upload_report(user,description,longitude,latitude,filenames):
     """
     Uploads a user incident report to the database
     :param user: the user making the report
     :param description: the user's text description of the incident
     :param longitude: the longitude of the incident's location
     :param latitude: the latitude of the incident's location
+    :param filenames: the names of the of files uploaded with the report (after being uploaded to the server)
     :return: an error message if there is any, or None if the report upload succeeds
     """
 
-    incident=IncidentReport(user_id=user.id,description=description,longitude=longitude,latitude=latitude,date_time=datetime.now())
+    incident=IncidentReport(user_id=user.id,description=description,longitude=longitude,latitude=latitude,date_time=datetime.now(),filenames=filenames)
     db.session.add(incident)
     db.session.commit()
     return None
@@ -73,3 +74,9 @@ def get_latest_report_id():
         return highest_id
     else:
         return 0
+
+def get_all_reports():
+    """
+    Retrieves a list of all currently recorded reports in the database
+    """
+    return IncidentReport.query.all()
