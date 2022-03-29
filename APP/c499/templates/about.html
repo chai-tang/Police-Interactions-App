@@ -1,11 +1,17 @@
 {% extends 'base.html' %}
 
-{% block header %}
-<h1>{% block title %}About{% endblock %}</h1>
-{% endblock %}
-
 {% block content %}
-<p>PLACEHOLDER TEXT - THIS IS THE ABOUT PAGE</p>
+<link rel="stylesheet" href="{{ url_for('static', filename='css/about.css') }}">
 
-<a id="return_link" href='/'>Return to Homepage</a>
+<h1>{% block title %}About Us{% endblock %}</h1>
+
+<h3 id='info'>APPNAME is an undergraduate student project made at Queen's University under the supervision of Dr. Catherine Stinson.</h3>
+<h3 id='info'>Our goal is to develop a mobile app requested by a community group that experiences police harassment. We want to create an app that empowers people to take a stand againse police harrassment, while keeping their privacy and safety a top priority.</h3>
+<h4 id='info'>You can find a some more resources on police accountability here: [link]</h4>
+<h4 id='info'>More safety and legal notes here: [link]</h4>
+
+<div id="return">
+    <span><a id="return_link" href='/'>Return to Homepage</a></span>
+</div>
+
 {% endblock %}

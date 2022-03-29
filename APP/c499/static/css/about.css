@@ -1,0 +1,45 @@
+html, body{
+    background-color: #353535;
+    height:100%;
+    margin:0;
+}
+
+.wrapper{
+    display:flex;
+    flex-direction: column;
+    height:100%;
+}
+
+#info{
+    margin-left: 16px;
+    margin-right: 16px;
+    text-align: left;
+    color: #D2D7DF;
+}
+
+h1 {
+    margin-left: 16px;
+    margin-right: 16px;
+    margin-top: 64px;
+    margin-bottom: 8px;
+    text-align: left;
+    color: white;
+}
+
+#return{
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    color: #D2D7DF;
+    text-align: left;
+    height:100%;
+    font-family: Arial, Helvetica, sans-serif;
+}
+#return a{
+    color: #399E5A;
+    text-decoration: none;
+}
+#return span{
+    margin-bottom:32px;
+    margin-left:16px;
+}

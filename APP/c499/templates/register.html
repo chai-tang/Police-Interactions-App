@@ -1,11 +1,11 @@
 {% extends 'base.html' %}
 
 {% block content %}
-<link rel="stylesheet" href="{{ url_for('static', filename='css/login.css') }}">
+<link rel="stylesheet" href="{{ url_for('static', filename='css/register.css') }}">
+
 
 <div id="logo-and-logins">
-  <h1>{% block title %}Sign Up{% endblock %}</h1>
-  <h4 id='message'>{{message}}</h4>
+  <h1>{% block title %}New Account{% endblock %}</h1>
   <form method="post">
     <div class="form-group">
 
@@ -21,7 +21,7 @@
 
       <div class="icon-group">
         <img src="{{ url_for('static', filename='media/key_icon.png') }}">
-        <input class="form-control" type="password" name="password" id="password" placeholder="Password" required>
+        <input class="form-control" type="password" name="password" id="password" placeholder="Password (minimum 6 characters)" required>
       </div>
 
       <div class="icon-group">
@@ -29,16 +29,19 @@
         <input class="form-control" type="password" name="password2" id="password2" placeholder="Confirm Password" required>
       </div>
 
+      <h4 id='message'>{{message}}</h4>
 
-      <div id="login-button">
+      <div id="register-button">
         <input class="btn btn-lg btn-primary" type="submit" id="btn-submit" value="Register">
       </div>
     </div>
   </form>
 </div>
 
-<div id="sub-logins">
-  <span></span>
-  <span><a href='/login' id="login">Return to login page</a></span>
+<div id="sub-register">
+  <span>Already have an account? <a href='/login' id="register">Return to Login</a></span>
 </div>
+
+
+
 {% endblock %}

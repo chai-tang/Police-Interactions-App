@@ -24,7 +24,7 @@ def register_get():
         return redirect('/', code=303)
 
     # templates are stored in the templates folder
-    return render_template('register.html', message='Please register')
+    return render_template('register.html', message='')
 
 
 @app.route('/register', methods=['POST'])
@@ -53,13 +53,13 @@ def register_post():
 
     # check that the forms all match the required patterns using regular expressions
     elif not(emailPattern.match(email)) or not(lengthPattern.match(email)):
-        message="Please enter a valid email address"
+        message="Please enter a valid email adress"
         error = True
     elif not(passwordPattern.match(password)):
-        message="Your password must be at least 6 characters long"
+        message="Password must be at least 6 characters long"
         error = True
     elif not(usernamePattern.match(name)):
-        message="Your username must be alphanumeric, no more than 18 characters long"
+        message="Username must be alphanumeric, no more than 18 characters long"
         error = True
 
     # if all forms are correct, attempt to register the user
@@ -67,10 +67,10 @@ def register_post():
         user = bn.get_user(email)
         # if the user already exists, send an error message
         if user:
-            return render_template('register.html', message="That email has already been registered")
+            return render_template('register.html', message="This email has already been used")
         # if the registration fails for some reason (register_user doesn't return none) send an error message
         elif bn.register_user(email, name, password, password2) != None:
-            return render_template('register.html', message="Failed to register new user, please try again")
+            return render_template('register.html', message="Failed to register new user, please try again in a bit")
         # if no errors occur, set balance to 5000
         else:
             message = "Registration successful, please login now"
