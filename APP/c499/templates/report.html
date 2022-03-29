@@ -1,14 +1,33 @@
 {% extends 'base.html' %}
 
 {% block header %}
-<h1>{% block title %}Incident Report{% endblock %}</h1>
+
 {% endblock %}
 
 {% block content %}
-<p>PLACEHOLDER TEXT - THIS IS THE REPORT PAGE</p>
+<div>
+    <h1>{% block title %}Report an Incident{% endblock %}</h1>
+    <h4 id='message'>{{message}}</h4>
+    
+    <form method="post" id="incident-report" enctype="multipart/form-data">
+        <label>Add Incident Description</label>
+        <input type="text" name="description" required>
+
+        <label>Upload Video or Image (jpg, jpeg, png or mp4 only)</label>
+        <input type="file" name="files" accept="video/*,image/*" multiple>
+
+        <label>Latitude</label>
+        <input type="text" name="latitude" required>
+        <label>Longitude</label>
+        <input type="text" name="longitude" required>
+
+        <input class="button" type="submit" id="submit-button" value="Submit">
+    </form>
+</div>
+
 <ul>
-    <li><a href="/map">Incident Map</a></li>
+    <li><a href="/map">View Incident Map</a></li>
+    <li><a id="return_link" href='/'>Return to Homepage</a></li>
 </ul>
 
-<a id="return_link" href='/'>Return to Homepage</a>
 {% endblock %}

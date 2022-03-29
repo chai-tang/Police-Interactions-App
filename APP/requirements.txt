@@ -28,7 +28,7 @@ wcwidth
 Werkzeug
 wrapt
 zipp
-
+flask-googlemaps
 flask-pytest
 seleniumbase
 pymysql

@@ -1,4 +1,6 @@
 from flask import Flask
+#from flask_googlemaps import GoogleMaps
+from werkzeug.utils import secure_filename
 import os
 
 """
@@ -16,8 +18,15 @@ static = os.path.join(
     package_dir, "static"
 )
 
+upload = os.path.join(
+    package_dir, "user_uploads"
+)
+
 app = Flask('this is a simple web application', template_folder=templates)
 app.static_folder=static
+app.config['UPLOAD_FOLDER'] = upload
+#app.config["GOOGLEMAPS_KEY"] = "AIzaSyBt3CpmFFfOB0qTrn7Qa1Mj189jgo6xdmk"
+#GoogleMaps(app)
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 app.config['SECRET_KEY'] = '69cae04b04756f65eabcd2c5a11c8c24'
 # if the user supplies a database file name, we use

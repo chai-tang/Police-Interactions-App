@@ -1,14 +1,31 @@
 {% extends 'base.html' %}
 
 {% block header %}
-<h1>{% block title %}Incident Map{% endblock %}</h1>
+
 {% endblock %}
 
 {% block content %}
-<p>PLACEHOLDER TEXT - THIS IS THE MAP PAGE</p>
+
+<h1>{% block title %}Incident Map{% endblock %}</h1>
+<h4 id='message'>{{message}}</h4>
+
+<div id="report-list">
+{% for report in all_reports %}
+    <div class="report">
+        <p>Report ID: {{report.id}}</p> 
+        <p>Description: {{report.description}}</p> 
+        <p>Longitude: {{report.latitude}}</p> 
+        <p>Latitude {{report.longitude}}</p> 
+        <p>Date Uploaded: {{report.date_time}}</p>
+        {% for filename in all_filenames[report.id-1]: %}
+            <img src="{{ url_for('download_file', filename=filename) }}">
+        {% endfor %}
+    </div>
+{% endfor %}
+</div>
+
 <ul>
     <li><a href="/report">Report an Incident</a></li>
+    <li><a id="return_link" href='/'>Return to Homepage</a></li>
 </ul>
-
-<a id="return_link" href='/'>Return to Homepage</a>
 {% endblock %}
