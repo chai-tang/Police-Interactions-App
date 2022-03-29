@@ -7,6 +7,7 @@ import re
 import datetime
 import sys
 import os
+import json
 
 """
 This file defines the front-end part of the service.
@@ -184,7 +185,25 @@ def home(user):
     # the login checking code all the time for other
     # front-end portals
     welcome_header='Welcome, {}'.format(user.name)
-    return render_template('index.html', welcome_header=welcome_header, user=user)
+
+    # retrieve all reports to display on the home map
+    all_reports = bn.get_all_reports()
+    report_count = len(all_reports)
+    # compile report data into a series of lists to pass to the javascript mapping functions
+    latitudes = []
+    longitudes = []
+    descriptions = []
+    all_filenames = []
+    all_dates = []
+    for report in all_reports:
+        latitudes.append(report.latitude)
+        longitudes.append(report.longitude)
+        descriptions.append(report.description)
+        filenames = report.filenames.split(',')[0:-1]
+        all_filenames.append(filenames)
+        all_dates.append(report.date_time.strftime('%Y-%m-%d'))
+
+    return render_template('index.html', welcome_header=welcome_header, user=user, report_count=report_count, latitudes=latitudes, longitudes=longitudes, descriptions=descriptions, all_filenames=all_filenames, all_dates=all_dates)
 
 @app.route('/profile')
 @authenticate
@@ -228,25 +247,26 @@ def report(user):
         report_id = bn.get_latest_report_id() + 1
         filecount = 0
         filenames = []
-        for file in files:
-            if file and allowed_file(file.filename) and file.filename != '':
-                # I'm not exactly sure what secure_filename does but everyone says
-                # it's safest to use it, so here it is
-                filename = secure_filename(file.filename)
+        if files[0]:
+            for file in files:
+                if file and allowed_file(file.filename) and file.filename != '':
+                    # I'm not exactly sure what secure_filename does but everyone says
+                    # it's safest to use it, so here it is
+                    filename = secure_filename(file.filename)
 
-                # for organization purposes, all files uploaded get renamed before they're saved.
-                # user files are saved to the user_uploads folder.
-                # the naming convention is [REPORT_ID]-[FILE_NUMBER].extension
-                # ex. If report number 43 uploads two png's and one jpeg, then the filenames will be:
-                # 43-0.png 43-1.png 43-2.jpeg
-                extension = filename.split('.')[-1]
-                filename = str(report_id)+"-"+str(filecount)+"."+extension
-                file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
-                filecount += 1
-                filenames.append(filename)
-            else:
-                valid = False
-                message = "Error: One or more of your files failed to upload."
+                    # for organization purposes, all files uploaded get renamed before they're saved.
+                    # user files are saved to the user_uploads folder.
+                    # the naming convention is [REPORT_ID]-[FILE_NUMBER].extension
+                    # ex. If report number 43 uploads two png's and one jpeg, then the filenames will be:
+                    # 43-0.png 43-1.png 43-2.jpeg
+                    extension = filename.split('.')[-1]
+                    filename = str(report_id)+"-"+str(filecount)+"."+extension
+                    file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
+                    filecount += 1
+                    filenames.append(filename)
+                else:
+                    valid = False
+                    message = "Error: One or more of your files failed to upload."
 
          # if all inputs are valid, upload the report to the database
         if valid:

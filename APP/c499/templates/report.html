@@ -17,16 +17,27 @@
         <input type="file" name="files" accept="video/*,image/*" multiple>
 
         <label>Latitude</label>
-        <input type="text" name="latitude" required>
+        <input type="text" name="latitude" id="latitude" required>
         <label>Longitude</label>
-        <input type="text" name="longitude" required>
+        <input type="text" name="longitude" id="longitude" required>
 
         <input class="button" type="submit" id="submit-button" value="Submit">
     </form>
+    <script>
+        var GET = {};
+        var queryString = window.location.search.replace(/^\?/, '');
+        queryString.split(/\&/).forEach(function(keyValuePair) {
+            var paramName = keyValuePair.replace(/=.*$/, ""); // some decoding is probably necessary
+            var paramValue = keyValuePair.replace(/^[^=]*\=/, ""); // some decoding is probably necessary
+            GET[paramName] = paramValue;
+        });
+        document.getElementById("latitude").value = GET["form/latitude"];
+        document.getElementById("longitude").value = GET["form/longitude"];
+    </script>
 </div>
 
 <ul>
-    <li><a href="/map">View Incident Map</a></li>
+    <li><a href="/map">View Incident List</a></li>
     <li><a id="return_link" href='/'>Return to Homepage</a></li>
 </ul>
 

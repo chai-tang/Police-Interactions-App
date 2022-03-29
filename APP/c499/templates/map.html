@@ -6,7 +6,7 @@
 
 {% block content %}
 
-<h1>{% block title %}Incident Map{% endblock %}</h1>
+<h1>{% block title %}Incident List{% endblock %}</h1>
 <h4 id='message'>{{message}}</h4>
 
 <div id="report-list">
@@ -17,9 +17,11 @@
         <p>Longitude: {{report.latitude}}</p> 
         <p>Latitude {{report.longitude}}</p> 
         <p>Date Uploaded: {{report.date_time}}</p>
+        <ol>
         {% for filename in all_filenames[report.id-1]: %}
-            <img src="{{ url_for('download_file', filename=filename) }}">
+            <li><a href="{{ url_for('download_file', filename=filename) }}">File Upload</a></li>
         {% endfor %}
+        </ol>
     </div>
 {% endfor %}
 </div>
