@@ -15,9 +15,6 @@
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.7.1/leaflet.css" />
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/mapbox-gl/1.13.1/mapbox-gl.min.css" />
 
-<style>
-    #map {height: 720px;}
-</style>
 
 <body>
     <header>
@@ -44,7 +41,8 @@
         var map = L.map('map').setView([44.2279, -76.4955], 16);
 
         var gl = L.mapboxGL({
-            attribution: "\u003ca href=\"https://www.maptiler.com/copyright/\" target=\"_blank\"\u003e\u0026copy; MapTiler\u003c/a\u003e \u003ca href=\"https://www.openstreetmap.org/copyright\" target=\"_blank\"\u003e\u0026copy; OpenStreetMap contributors\u003c/a\u003e",
+            attribution: "<a href=\"https://www.maptiler.com/copyright/\" target=\"_blank\">&copy;MapTiler</a> " + 
+                         "<a href=\"https://www.openstreetmap.org/copyright\" target=\"_blank\">&copy; OpenStreetMap contributors</a>",
             style: 'https://api.maptiler.com/maps/bright/style.json?key=a7JHYpZPJCTe1W95jeYW'
         }).addTo(map);
 

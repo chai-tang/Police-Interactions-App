@@ -4,6 +4,9 @@
     box-sizing: border-box;
     margin: 0;
     padding: 0;
+}
+
+body {
     background-color: #353535;
 }
 
@@ -38,7 +41,6 @@ li, a, button {
     font-size: 16px;
     color: #EDF0F1;
     text-decoration: none;
-    background-color: #7985BD;
 }
 
 p {
@@ -95,3 +97,11 @@ button {
 button:hover {
     background-color: rgba(127, 159, 67, 1);
 }
+
+#map {
+    height: 720px;
+    margin-left: 32px;
+    margin-right: 32px;
+    background-color: transparent;
+}
+
