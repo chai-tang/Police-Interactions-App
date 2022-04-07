@@ -184,7 +184,9 @@ def home(user):
     # by using @authenticate, we don't need to re-write
     # the login checking code all the time for other
     # front-end portals
-    welcome_header='Welcome, {}'.format(user.name)
+    # welcome_header='Hello, {}'.format(user.name) + ' Howdy'
+
+    welcome_header='Welcome back to iWitness, a community ran safety database to report and archive local interactions with law enforcement. Click a location on the map to begin'
 
     # retrieve all reports to display on the home map
     all_reports = bn.get_all_reports()
@@ -195,15 +197,23 @@ def home(user):
     descriptions = []
     all_filenames = []
     all_dates = []
+    name = []
+    plates = []
+    badge = []
+    profile =[]
     for report in all_reports:
         latitudes.append(report.latitude)
         longitudes.append(report.longitude)
         descriptions.append(report.description)
+        plates.append(report.plates)
+        name.append(report.name)
+        badge.append(report.badge)
+        profile.append(report.profile)
         filenames = report.filenames.split(',')[0:-1]
         all_filenames.append(filenames)
         all_dates.append(report.date_time.strftime('%Y-%m-%d'))
 
-    return render_template('index.html', welcome_header=welcome_header, user=user, report_count=report_count, latitudes=latitudes, longitudes=longitudes, descriptions=descriptions, all_filenames=all_filenames, all_dates=all_dates)
+    return render_template('index.html', welcome_header=welcome_header, user=user, report_count=report_count, latitudes=latitudes, longitudes=longitudes, descriptions=descriptions,plates=plates, name=name, badge=badge, profile=profile, all_filenames=all_filenames, all_dates=all_dates)
 
 @app.route('/profile')
 @authenticate
@@ -227,6 +237,10 @@ def report(user):
         description = request.form.get('description')
         latitude = request.form.get('latitude')
         longitude = request.form.get('longitude')
+        plates = request.form.get('plates')
+        name = request.form.get('name')
+        badge = request.form.get('badge')
+        profile = request.form.get('profile')
 
         valid = True
         # verify that the form inputs are valid
@@ -273,7 +287,7 @@ def report(user):
             filenamestr = ""
             for file in filenames:
                 filenamestr = filenamestr + file + ','
-            bn.upload_report(user,description,longitude,latitude,filenamestr)
+            bn.upload_report(user,description,longitude,latitude,plates,name,badge,profile,filenamestr)
             message = "Report uploaded successfully"
     
     return render_template('report.html', user=user, message=message)
