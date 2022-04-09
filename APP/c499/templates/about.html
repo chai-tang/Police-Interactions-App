@@ -1,11 +1,14 @@
+<!-- include base template -->
 {% extends 'base.html' %}
 
+<!-- tab -->
+{% block header %}
+<h1>{% block title %}About{% endblock %}</h1>
+{% endblock %}
+
+<!-- style -->
 {% block content %}
 <link rel="stylesheet" href="{{ url_for('static', filename='css/about.css') }}">
-<<<<<<< Updated upstream
-
-<h1>{% block title %}About Us{% endblock %}</h1>
-=======
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Heebo:wght@300&display=swap" rel="stylesheet">
@@ -47,20 +50,10 @@
     <h2>POLICE ACCOUNTABILITY RESOURCES</h2>
 
     <h3>links to resources</h3>
->>>>>>> Stashed changes
 
-<h3 id='info'>APPNAME is an undergraduate student project made at Queen's University under the supervision of Dr. Catherine Stinson.</h3>
-<h3 id='info'>Our goal is to develop a mobile app requested by a community group that experiences police harassment. We want to create an app that empowers people to take a stand againse police harrassment, while keeping their privacy and safety a top priority.</h3>
-<h4 id='info'>You can find a some more resources on police accountability here: [link]</h4>
-<h4 id='info'>More safety and legal notes here: [link]</h4>
+    <h2>SAFETY / LEGAL</h2>
 
-<<<<<<< Updated upstream
-<div id="return">
-    <span><a id="return_link" href='/'>Return to Homepage</a></span>
-</div>
-=======
     <h3>disclaimers and saftey info</h3>
 </body>
->>>>>>> Stashed changes
 
 {% endblock %}

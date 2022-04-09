@@ -49,7 +49,7 @@ def register_user(email, name, password, password2):
     db.session.commit()
     return None
 
-def upload_report(user,description,longitude,latitude,filenames):
+def upload_report(user,description,longitude,latitude,plates,name,badge,profile,filenames):
     """
     Uploads a user incident report to the database
     :param user: the user making the report
@@ -60,7 +60,7 @@ def upload_report(user,description,longitude,latitude,filenames):
     :return: an error message if there is any, or None if the report upload succeeds
     """
 
-    incident=IncidentReport(user_id=user.id,description=description,longitude=longitude,latitude=latitude,date_time=datetime.now(),filenames=filenames)
+    incident=IncidentReport(user_id=user.id,description=description,longitude=longitude,latitude=latitude,plates=plates,name=name,badge=badge,profile=profile,date_time=datetime.now(),filenames=filenames)
     db.session.add(incident)
     db.session.commit()
     return None

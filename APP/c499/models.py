@@ -30,7 +30,11 @@ class IncidentReport(db.Model):
     latitude = db.Column(db.Float) 
     longitude = db.Column(db.Float) 
     date_time = db.Column(db.DateTime)    
-    description = db.Column(db.Text) 
+    description = db.Column(db.Text)
+    plates = db.Column(db.Text)
+    name = db.Column(db.Text)
+    badge = db.Column(db.Text)
+    profile = db.Column(db.Text)
     filenames = db.Column(db.String)
 
 # it creates all the SQL tables if they do not exist
