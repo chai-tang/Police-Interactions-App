@@ -1,3 +1,9 @@
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
 html, body{
     background-color: #353535;
     height:100%;
@@ -26,6 +32,34 @@ h1 {
     color: white;
 }
 
+button {
+    margin-left: 20px;
+    padding: 9px 25px;
+    background-color: rgba(242, 175, 41, 1);
+    border: none;
+    border-radius: 50px;
+    cursor: pointer;
+    transition: all 0.3s ease 0s;
+}
+
+h2 {
+    text-align: left;
+    padding: 1% 5%;
+    font-family: 'Heebo', sans-serif;
+    color: #F2AF29;
+    font-size: 24px;
+    background-color: #353535;
+}
+
+h3 {
+    color: #EDF2F4;
+    padding: 1% 5%;
+    font-weight: 400;
+    font-size: 22px;
+    font-family: 'Heebo', sans-serif;
+    background-color: #353535;
+}
+
 #return{
     display: flex;
     flex-direction: column;
@@ -43,3 +77,68 @@ h1 {
     margin-bottom:32px;
     margin-left:16px;
 }
+
+li, a, button {
+    font-family: 'Heebo', sans-serif;
+    font-weight: 500;
+    font-size: 17px;
+    color: #EDF2F4;
+    text-decoration: none;
+}
+
+header {
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    padding: 0% 2%;
+    background-color: #353535;
+}
+
+img, .logo {
+    
+    cursor: pointer;
+    margin-right: auto;
+}
+
+.header_bar {
+    list-style: none;
+    background-color: #353535;
+}
+
+    .header_bar li {
+        display: inline-block;
+        padding: 0px 20px;
+        background-color: #353535;
+    }
+
+
+        .header_bar li a {
+            transition: all 0.3s ease 0s;
+        }
+
+            .header_bar li a:hover {
+                color: #F2AF29;
+                background-color: #353535;
+            }
+
+button:hover {
+    background-color: rgba(242, 175, 41, 0.8);
+}
+
+.titles li {
+    display: inline-block;
+    padding-top: 1%;
+    padding-bottom: 1%;
+    background-color: #2B2D42;
+    color: #F2AF29;
+    font-family: 'Rubik', sans-serif;
+    font-size: 22px;
+}
+
+    .titles li:nth-child(1) {
+        padding-left: 10%;
+    }
+
+    .titles li:nth-child(2) {
+        padding-left: 45%;
+    }
