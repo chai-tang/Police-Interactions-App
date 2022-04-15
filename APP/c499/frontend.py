@@ -177,8 +177,7 @@ def authenticate(inner_function):
     return wrapped_inner
 
 @app.route('/')
-@authenticate
-def home(user):
+def home():
     # authentication is done in the wrapper function
     # see above.
     # by using @authenticate, we don't need to re-write
@@ -186,6 +185,7 @@ def home(user):
     # front-end portals
     # welcome_header='Hello, {}'.format(user.name) + ' Howdy'
 
+    logged_in = 'logged_in' in session
     welcome_header='Welcome back to iWitness, a community ran safety database to report and archive local interactions with law enforcement. Click a location on the map to begin'
 
     # retrieve all reports to display on the home map
@@ -213,7 +213,7 @@ def home(user):
         all_filenames.append(filenames)
         all_dates.append(report.date_time.strftime('%Y-%m-%d'))
 
-    return render_template('index.html', welcome_header=welcome_header, user=user, report_count=report_count, latitudes=latitudes, longitudes=longitudes, descriptions=descriptions,plates=plates, name=name, badge=badge, profile=profile, all_filenames=all_filenames, all_dates=all_dates)
+    return render_template('index.html', welcome_header=welcome_header, logged_in=logged_in, report_count=report_count, latitudes=latitudes, longitudes=longitudes, descriptions=descriptions,plates=plates, name=name, badge=badge, profile=profile, all_filenames=all_filenames, all_dates=all_dates)
 
 @app.route('/profile')
 @authenticate
@@ -227,8 +227,7 @@ def allowed_file(filename):
            filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
 
 @app.route('/report', methods=['POST','GET'])
-@authenticate
-def report(user):
+def report():
      
     message = 'Upload your incident details below'
 
@@ -284,17 +283,26 @@ def report(user):
 
          # if all inputs are valid, upload the report to the database
         if valid:
+
+            # if the user is logged in, pass their user_id
+            # else, pass -1 as the user_id
+            if 'logged_in' in session:
+                email = session['logged_in']
+                user = bn.get_user(email)
+                user_id = user.id
+            else:
+                user_id = -1
+
             filenamestr = ""
             for file in filenames:
                 filenamestr = filenamestr + file + ','
-            bn.upload_report(user,description,longitude,latitude,plates,name,badge,profile,filenamestr)
+            bn.upload_report(user_id,description,longitude,latitude,plates,name,badge,profile,filenamestr)
             message = "Report uploaded successfully"
     
-    return render_template('report.html', user=user, message=message)
+    return render_template('report.html', message=message)
 
 @app.route('/map')
-@authenticate
-def map(user):
+def map():
     message = "View all incident reports below"
 
     all_reports = bn.get_all_reports()
@@ -306,16 +314,15 @@ def map(user):
         filenames = report.filenames.split(',')[0:-1]
         all_filenames.append(filenames)
 
-    return render_template('map.html', user=user, message=message, all_reports=all_reports, all_filenames=all_filenames)
+    return render_template('map.html', message=message, all_reports=all_reports, all_filenames=all_filenames)
 
 @app.route('/uploads/<path:filename>')
 def download_file(filename):
     return send_from_directory(app.config["UPLOAD_FOLDER"], filename)
 
 @app.route('/about')
-@authenticate
-def about(user):
-    return render_template('about.html', user=user)
+def about():
+    return render_template('about.html')
 
 @app.route('/history')
 @authenticate

@@ -37,9 +37,16 @@
         </nav>
 
         <!-- login -->
+        {% if logged_in %}
+        <a class="login_button" href="/logout">
+            <button>Logout</button>
+        </a>
+        {% else %}
         <a class="login_button" href="/login">
             <button>Login</button>
         </a>
+        {% endif %}
+
     </header>
 
     <h4 id='message'>{{message}}</h4>
