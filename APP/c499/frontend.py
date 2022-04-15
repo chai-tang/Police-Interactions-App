@@ -7,6 +7,7 @@ import re
 import datetime
 import sys
 import os
+import json
 
 """
 This file defines the front-end part of the service.
@@ -176,15 +177,43 @@ def authenticate(inner_function):
     return wrapped_inner
 
 @app.route('/')
-@authenticate
-def home(user):
+def home():
     # authentication is done in the wrapper function
     # see above.
     # by using @authenticate, we don't need to re-write
     # the login checking code all the time for other
     # front-end portals
-    welcome_header='Welcome, {}'.format(user.name)
-    return render_template('index.html', welcome_header=welcome_header, user=user)
+    # welcome_header='Hello, {}'.format(user.name) + ' Howdy'
+
+    logged_in = 'logged_in' in session
+    welcome_header='Welcome back to iWitness, a community ran safety database to report and archive local interactions with law enforcement. Click a location on the map to begin'
+
+    # retrieve all reports to display on the home map
+    all_reports = bn.get_all_reports()
+    report_count = len(all_reports)
+    # compile report data into a series of lists to pass to the javascript mapping functions
+    latitudes = []
+    longitudes = []
+    descriptions = []
+    all_filenames = []
+    all_dates = []
+    name = []
+    plates = []
+    badge = []
+    profile =[]
+    for report in all_reports:
+        latitudes.append(report.latitude)
+        longitudes.append(report.longitude)
+        descriptions.append(report.description)
+        plates.append(report.plates)
+        name.append(report.name)
+        badge.append(report.badge)
+        profile.append(report.profile)
+        filenames = report.filenames.split(',')[0:-1]
+        all_filenames.append(filenames)
+        all_dates.append(report.date_time.strftime('%Y-%m-%d'))
+
+    return render_template('index.html', welcome_header=welcome_header, logged_in=logged_in, report_count=report_count, latitudes=latitudes, longitudes=longitudes, descriptions=descriptions,plates=plates, name=name, badge=badge, profile=profile, all_filenames=all_filenames, all_dates=all_dates)
 
 @app.route('/profile')
 @authenticate
@@ -198,8 +227,7 @@ def allowed_file(filename):
            filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
 
 @app.route('/report', methods=['POST','GET'])
-@authenticate
-def report(user):
+def report():
      
     message = 'Upload your incident details below'
 
@@ -208,6 +236,10 @@ def report(user):
         description = request.form.get('description')
         latitude = request.form.get('latitude')
         longitude = request.form.get('longitude')
+        plates = request.form.get('plates')
+        name = request.form.get('name')
+        badge = request.form.get('badge')
+        profile = request.form.get('profile')
 
         valid = True
         # verify that the form inputs are valid
@@ -228,39 +260,49 @@ def report(user):
         report_id = bn.get_latest_report_id() + 1
         filecount = 0
         filenames = []
-        for file in files:
-            if file and allowed_file(file.filename) and file.filename != '':
-                # I'm not exactly sure what secure_filename does but everyone says
-                # it's safest to use it, so here it is
-                filename = secure_filename(file.filename)
+        if files[0]:
+            for file in files:
+                if file and allowed_file(file.filename) and file.filename != '':
+                    # I'm not exactly sure what secure_filename does but everyone says
+                    # it's safest to use it, so here it is
+                    filename = secure_filename(file.filename)
 
-                # for organization purposes, all files uploaded get renamed before they're saved.
-                # user files are saved to the user_uploads folder.
-                # the naming convention is [REPORT_ID]-[FILE_NUMBER].extension
-                # ex. If report number 43 uploads two png's and one jpeg, then the filenames will be:
-                # 43-0.png 43-1.png 43-2.jpeg
-                extension = filename.split('.')[-1]
-                filename = str(report_id)+"-"+str(filecount)+"."+extension
-                file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
-                filecount += 1
-                filenames.append(filename)
-            else:
-                valid = False
-                message = "Error: One or more of your files failed to upload."
+                    # for organization purposes, all files uploaded get renamed before they're saved.
+                    # user files are saved to the user_uploads folder.
+                    # the naming convention is [REPORT_ID]-[FILE_NUMBER].extension
+                    # ex. If report number 43 uploads two png's and one jpeg, then the filenames will be:
+                    # 43-0.png 43-1.png 43-2.jpeg
+                    extension = filename.split('.')[-1]
+                    filename = str(report_id)+"-"+str(filecount)+"."+extension
+                    file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
+                    filecount += 1
+                    filenames.append(filename)
+                else:
+                    valid = False
+                    message = "Error: One or more of your files failed to upload."
 
          # if all inputs are valid, upload the report to the database
         if valid:
+
+            # if the user is logged in, pass their user_id
+            # else, pass -1 as the user_id
+            if 'logged_in' in session:
+                email = session['logged_in']
+                user = bn.get_user(email)
+                user_id = user.id
+            else:
+                user_id = -1
+
             filenamestr = ""
             for file in filenames:
                 filenamestr = filenamestr + file + ','
-            bn.upload_report(user,description,longitude,latitude,filenamestr)
+            bn.upload_report(user_id,description,longitude,latitude,plates,name,badge,profile,filenamestr)
             message = "Report uploaded successfully"
     
-    return render_template('report.html', user=user, message=message)
+    return render_template('report.html', message=message)
 
 @app.route('/map')
-@authenticate
-def map(user):
+def map():
     message = "View all incident reports below"
 
     all_reports = bn.get_all_reports()
@@ -272,16 +314,15 @@ def map(user):
         filenames = report.filenames.split(',')[0:-1]
         all_filenames.append(filenames)
 
-    return render_template('map.html', user=user, message=message, all_reports=all_reports, all_filenames=all_filenames)
+    return render_template('map.html', message=message, all_reports=all_reports, all_filenames=all_filenames)
 
 @app.route('/uploads/<path:filename>')
 def download_file(filename):
     return send_from_directory(app.config["UPLOAD_FOLDER"], filename)
 
 @app.route('/about')
-@authenticate
-def about(user):
-    return render_template('about.html', user=user)
+def about():
+    return render_template('about.html')
 
 @app.route('/history')
 @authenticate
