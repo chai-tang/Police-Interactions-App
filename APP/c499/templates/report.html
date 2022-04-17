@@ -23,25 +23,34 @@
             <ul class="header_bar">
                 <li><a href="/report">Report</a></li>
                 <li><a href="/map">Incidents</a></li>
+                <li><a href="/history">My History</a></li>
                 <li><a href="/about">About</a></li>
             </ul>
         </nav>
 
         <!-- login -->
+        {% if logged_in %}
+        <a class="login_button" href="/logout">
+            <button>Logout</button>
+        </a>
+        {% else %}
         <a class="login_button" href="/login">
             <button>Login</button>
         </a>
+        {% endif %}
+        
     </header>
 
     <div>
         <h2>Incident Report</h2>
-        
 
             <form method="post" id="incident-report" enctype="multipart/form-data">
+                <h3>{{message}}</h3>
                 <div class="form-group">
                     <h3>Required</h3>
+                    <label>Description</label>
                     <div class="icon-group">
-                        <input class="form-control" type="text" name="description" placeholder="description of the incidident" required>
+                        <input class="form-control" type="text" name="description" placeholder="add an incident description" required>
                     </div>
                     <div class="icon-group">
                         <input type="text" name="latitude" id="latitude" required>
@@ -49,21 +58,44 @@
                     <div class="icon-group">
                         <input type="text" name="longitude" id="longitude" required>
                     </div>
+                    <div class="icon-group">
+                        <a href="/">Return to map to select a location</a>
+                    </div>
+
                     <h3>Additional Information</h3>
+
+                    <label>Incident Type: (Hold shift or control to select multiple)</label>
+                    <select id="incident-type" name="incident-type" multiple>
+                        <option value="N/A">N/A</option>
+                        <option value="Roadside Stop">Roadside Stop</option>
+                        <option value="Arrest">Arrest</option>
+                        <option value="Violent Interaction">Violent Interaction</option>
+                        <option value="Harassment">Harassment</option>
+                    </select>
+
+                    <label>Officer's License Plate</label>
                     <div class="icon-group">
                         <input class="form-control" type="text" name="plates" placeholder="officer's license plate">
                     </div>
+                    <label>Officer's Name</label>
                     <div class="icon-group">
                         <input class="form-control" type="text" name="name" placeholder="officer's name">
                     </div>
+                    <label>Officer's Badge Number</label>
                     <div class="icon-group">
                         <input class="form-control" type="text" name="badge" placeholder="officer's badge number">
                     </div>
+                    <label>Officer's Description</label>
                     <div class="icon-group">
                         <input class="form-control" type="text" name="profile" placeholder="officer's description">
                     </div>
+                    <label>Time of Incident</label>
                     <div class="icon-group">
                         <input class="form-control" type="text" name="time" placeholder="time">
+                    </div>
+                    <label>Private Description (Won't be displayed on the public map)</label>
+                    <div class="icon-group">
+                        <input class="form-control" type="text" name="private-description" placeholder="add an private description">
                     </div>
                     <h3>Media</h3>
                     <input class="form-control" type="file" name="files" accept="video/*,image/*" multiple>

@@ -32,6 +32,7 @@
             <ul class="header_bar">
                 <li><a href="/report">Report</a></li>
                 <li><a href="/map">Incidents</a></li>
+                <li><a href="/history">My History</a></li>
                 <li><a href="/about">About</a></li>
             </ul>
         </nav>
@@ -63,7 +64,19 @@
     <!-- map -->
 
     <script>
-        var map = L.map('map').setView([44.2279, -76.4955], 16);
+
+        // position defaults to kingston
+        var default_lat = 44.2279;
+        var default_lon = -76.4955;
+
+        if (navigator.geolocation) {
+            navigator.geolocation.getCurrentPosition(function(position){
+                default_lat = position.coords.latitude;
+                default_lon = position.coords.longitude;
+            })
+        }
+
+        var map = L.map('map').setView([default_lat, default_lon], 16);
 
         var gl = L.mapboxGL({
             attribution: "<a href=\"https://www.maptiler.com/copyright/\" target=\"_blank\">&copy;MapTiler</a> " +
@@ -104,26 +117,29 @@
             var profile = JSON.parse('{{profile|tojson}}');
             var all_filenames = JSON.parse('{{all_filenames|tojson}}');
             var all_dates = JSON.parse('{{all_dates|tojson}}');
+            var incident_type = JSON.parse('{{incident_type|tojson}}');
 
             // generate and place map markers for every report in the database
             for(let i=0; i<report_count; i++){
 
                 // the text popup consists of the incident description, date, and links to all its associated files
-                
+
+                var textpopup0 = "<p>" + incident_type[i] + "<p>";
                 var textpopup1 = "<p>" + descriptions[i] + "</p>";
                 var textpopup2 = "<p>" + name[i] + "</p>";
                 var textpopup3 = "<p>" + plates[i];
                 var textpopup4 = "<p>" + badge[i] + "</p>";
                 var textpopup5 = "<p>" + profile[i] + "</p>";
                 var textpopup6 = "<p>" + all_dates[i] + "</p>";
-                var description = "<h1>Incident</h1>";
+                var type = "<h1>Incident Types</h1>";
+                var description = "<h1>Description</h1>";
                 var officertext = "<h1>Officer</h1>";
                 var platetext = "<h1>License Plate</h1>";
                 var profiletext = "<h1>Notes</h1>";
                 var badgetext = "<h1>Badge No.</h1>";
                 var datetext = "<h1>Reported</h1>";
 
-                textpopup = description + textpopup1 + officertext + textpopup2 + badgetext + textpopup4 + platetext + textpopup3 + profiletext + textpopup5 + datetext + textpopup6;
+                textpopup = type + textpopup0 + description + textpopup1 + officertext + textpopup2 + badgetext + textpopup4 + platetext + textpopup3 + profiletext + textpopup5 + datetext + textpopup6;
 
                 for(let j=0; j<all_filenames[i].length; j++){
                     // i apologize for this abomination of a line, but it was the only way i could dynamically create links to the user files
@@ -133,7 +149,7 @@
 
                 // place the marker
                 var marker = L.marker([latitudes[i],longitudes[i]]).addTo(map);
-                marker.bindPopup(textpopup).openPopup();
+                marker.bindPopup(textpopup);
             }
 
         }

@@ -5,7 +5,6 @@
 {% endblock %}
 
 <h1>{% block title %}Incident List{% endblock %}</h1>
-<h4 id='message'>{{message}}</h4>
 
 <!-- style -->
 {% block content %}
@@ -27,21 +26,31 @@
             <ul class="header_bar">
                 <li><a href="/report">Report</a></li>
                 <li><a href="/map">Incidents</a></li>
+                <li><a href="/history">My History</a></li>
                 <li><a href="/about">About</a></li>
             </ul>
         </nav>
 
         <!-- login -->
+        {% if logged_in %}
+        <a class="login_button" href="/logout">
+            <button>Logout</button>
+        </a>
+        {% else %}
         <a class="login_button" href="/login">
             <button>Login</button>
         </a>
+        {% endif %}
+        
     </header>
 
 
     <div>
+        <h4 id='message'>{{message}}</h4>
         {% for report in all_reports %}
         <div class="icon-group">
             <h3>Incident #{{report.id}} </h3><p>{{report.description}}</p>
+            <p>Incident Types: {{report.incident_type}}</p>
             <p>Officer: {{report.name}} Badge #{{report.badge}}</p>
             <p>Notes: {{report.profile}}</p>
             <p>Where: ({{report.latitude}}, {{report.longitude}})</p>
