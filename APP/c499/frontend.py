@@ -352,7 +352,7 @@ def history(user):
         filenames = report.filenames.split(',')[0:-1]
         all_filenames.append(filenames)
 
-    return render_template('map.html', logged_in=logged_in, user=user, message=message, all_reports=all_reports, all_filenames=all_filenames)
+    return render_template('history.html', logged_in=logged_in, user=user, message=message, all_reports=all_reports, all_filenames=all_filenames)
 
 
 @app.route('/settings')
