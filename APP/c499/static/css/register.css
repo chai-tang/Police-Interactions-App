@@ -22,7 +22,7 @@ h1 {
     margin-top: 64px;
     margin-bottom: 8px;
     text-align: center;
-    color: white;
+    color: rgba(242, 175, 41, 1);
 }
 
 form {
@@ -74,17 +74,15 @@ form {
     border: none;
 }
 
-#register-button input{
+#register-button input {
     height: 100%;
     width: 100%;
     border: none;
     border-radius: 32px;
     font-size: large;
-    background-color: #399E5A;
+    background-color: rgba(242, 175, 41, 1);
     color: white;
 }
-
-
 
 #sub-register{
     display: flex;
@@ -95,10 +93,12 @@ form {
     height:100%;
     font-family: Arial, Helvetica, sans-serif;
 }
-#sub-register a{
-    color: #399E5A;
+
+#sub-register a {
+    color: rgba(242, 175, 41, 1);
     text-decoration: none;
 }
+
 #sub-register span{
     margin-bottom:32px;
 }

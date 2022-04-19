@@ -36,6 +36,8 @@ class IncidentReport(db.Model):
     badge = db.Column(db.Text)
     profile = db.Column(db.Text)
     filenames = db.Column(db.String)
+    incident_type = db.Column(db.Text)
+    private_description = db.Column(db.Text)
 
 # it creates all the SQL tables if they do not exist
 with app.app_context():

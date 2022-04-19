@@ -1,11 +1,68 @@
+<!-- include base template -->
 {% extends 'base.html' %}
 
-{% block header %}
-<h1>{% block title %}My History{% endblock %}</h1>
-{% endblock %}
+<!-- tab title -->
+{% block title %}My History{% endblock %}
 
+<!-- housekeeping -->
 {% block content %}
-<p>PLACEHOLDER TEXT - THIS IS THE HISTORY PAGE</p>
+<link rel="stylesheet" href="{{ url_for('static', filename='css/map.css') }}">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Heebo:wght@300&display=swap" rel="stylesheet">
 
-<a id="return_link" href='/profile'>Return to Profile</a>
+<body>
+    <!-- navigation bar -->
+    <header>
+        <!-- logo -->
+        <a class="logo " href="/">
+            <img src="{{ url_for('static', filename='media/logo.png') }}">
+        </a>
+
+        <!-- links -->
+        <nav>
+            <ul class="header_bar">
+                <li><a href="/about">About</a></li>
+                <li><a href="/map">Incidents</a></li>
+                <li><a href="/report">Report</a></li>
+                {% if logged_in %}
+                <li><a href="/history">My History</a></li>
+                {% endif %}
+            </ul>
+        </nav>
+
+        <!-- login/logout button -->
+        {% if logged_in %}
+        <a class="login_button" href="/logout">
+            <button>Logout</button>
+        </a>
+        {% else %}
+        <a class="login_button" href="/login">
+            <button>Login</button>
+        </a>
+        {% endif %}
+    </header>
+
+    <!-- webpage text -->
+    <h4 id='message'>{{message}}</h4>
+
+    <div>
+        {% for report in all_reports %}
+        <div class="icon-group">
+            <h3>#{{report.id}} {{report.description}}</h3>
+            <p>Catergory: {{report.incident_type}}</p>
+            <p>Where: ({{report.latitude}}, {{report.longitude}})</p>
+            <p>When: {{report.date_time}}</p>
+            <p>Officer: {{report.name}} #{{report.badge}}</p>
+            <p>Notes: {{report.profile}}</p>
+            <p>Private Description: {{report.private_description}}</p>
+            <ol>
+                {% for filename in all_filenames[report.id-1]: %}
+                <li><a href="{{ url_for('download_file', filename=filename) }}">File Upload</a></li>
+                {% endfor %}
+            </ol>
+        </div>
+        {% endfor %}
+    </div>
+</body>
 {% endblock %}

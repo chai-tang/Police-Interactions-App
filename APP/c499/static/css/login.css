@@ -22,7 +22,7 @@ h1 {
     margin-top: 64px;
     margin-bottom: 8px;
     text-align: center;
-    color: white;
+    color: #F2AF29;
 }
 
 form {
@@ -74,17 +74,19 @@ form {
     border: none;
 }
 
-#login-button input{
+#login-button input {
     height: 100%;
     width: 100%;
     border: none;
     border-radius: 32px;
     font-size: large;
-    background-color: #399E5A;
+    background-color: rgba(242, 175, 41, 1);
     color: white;
 }
 
-
+#login-button:hover {
+    background-color: rgba(242, 175, 41, 0.8);
+}
 
 #sub-logins{
     display: flex;
@@ -95,8 +97,8 @@ form {
     height:100%;
     font-family: Arial, Helvetica, sans-serif;
 }
-#sub-logins a{
-    color: #399E5A;
+#sub-logins a {
+    color: rgba(242, 175, 41, 1);
     text-decoration: none;
 }
 #sub-logins span{
