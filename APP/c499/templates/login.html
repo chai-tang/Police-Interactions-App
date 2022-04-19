@@ -1,37 +1,42 @@
+<!-- include base template -->
 {% extends 'base.html' %}
 
+<!-- tab title -->
+{% block title %}Login{% endblock %}
+
+<!-- housekeeping -->
 {% block content %}
 <link rel="stylesheet" href="{{ url_for('static', filename='css/login.css') }}">
 
-
+<!-- login form -->
 <div id="logo-and-logins">
-  <h1>{% block title %}APPNAME{% endblock %}</h1>
-  <h4 id='message'>{{message}}</h4>
-  <form method="post">
-    <div class="form-group">
+    <!-- upper text -->
+    <h1>iWitness</h1>
+    <h4 id='message'>{{message}}</h4>
+    <form method="post">
+        <div class="form-group">
 
-      <div class="icon-group">
-        <img src="{{ url_for('static', filename='media/email_icon.png') }}">
-        <input class="form-control" name="email" id="email" placeholder="Email" required>
-      </div>
+            <div class="icon-group">
+                <img src="{{ url_for('static', filename='media/email_icon.png') }}">
+                <input class="form-control" name="email" id="email" placeholder="Email" required>
+            </div>
 
-      <div class="icon-group">
-        <img src="{{ url_for('static', filename='media/key_icon.png') }}">
-        <input class="form-control" type="password" name="password" id="password" placeholder="Password" required>
-      </div>
+            <div class="icon-group">
+                <img src="{{ url_for('static', filename='media/key_icon.png') }}">
+                <input class="form-control" type="password" name="password" id="password" placeholder="Password" required>
+            </div>
 
-      <div id="login-button">
-        <input class="btn btn-lg btn-primary" type="submit" id="btn-submit" value="Login">
-      </div>
-    </div>
-  </form>
+            <div id="login-button">
+                <input class="btn btn-lg btn-primary" type="submit" id="btn-submit" value="Login">
+            </div>
+        </div>
+    </form>
 </div>
 
+<!-- lower text -->
 <div id="sub-logins">
-  <span>Forgot your password? <a href='/forgot' id="forgot">Reset password</a></span>
-  <span>Don't have an account? <a href='/register' id="register">Sign up</a></span>
+    <span>Don't have an account? <a href='/register' id="register">Sign up</a></span>
+    <span>An account isn't required to use this site. <a href='/' id="home">Return to homepage</a></span>
 </div>
-
-
 
 {% endblock %}

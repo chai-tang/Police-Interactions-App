@@ -1,47 +1,53 @@
+<!-- include base template -->
 {% extends 'base.html' %}
 
+<!-- tab title -->
+{% block title %}Registration{% endblock %}
+
+<!-- housekeeping -->
 {% block content %}
 <link rel="stylesheet" href="{{ url_for('static', filename='css/register.css') }}">
 
-
+<!-- register form -->
 <div id="logo-and-logins">
-  <h1>{% block title %}New Account{% endblock %}</h1>
-  <form method="post">
-    <div class="form-group">
+    <!-- upper text -->
+    <h1>New Account</h1>
+    <form method="post">
+        <div class="form-group">
 
-      <div class="icon-group">
-        <img src="{{ url_for('static', filename='media/email_icon.png') }}">
-        <input class="form-control" name="email" id="email" placeholder="Email" required>
-      </div>
+            <div class="icon-group">
+                <img src="{{ url_for('static', filename='media/email_icon.png') }}">
+                <input class="form-control" name="email" id="email" placeholder="Email" required>
+            </div>
 
-      <div class="icon-group">
-        <img src="{{ url_for('static', filename='media/user_icon.png') }}">
-        <input class="form-control" name="name" id="name" placeholder="Username" required>
-      </div>
+            <div class="icon-group">
+                <img src="{{ url_for('static', filename='media/user_icon.png') }}">
+                <input class="form-control" name="name" id="name" placeholder="Username" required>
+            </div>
 
-      <div class="icon-group">
-        <img src="{{ url_for('static', filename='media/key_icon.png') }}">
-        <input class="form-control" type="password" name="password" id="password" placeholder="Password (minimum 6 characters)" required>
-      </div>
+            <div class="icon-group">
+                <img src="{{ url_for('static', filename='media/key_icon.png') }}">
+                <input class="form-control" type="password" name="password" id="password" placeholder="Password (minimum 6 characters)" required>
+            </div>
 
-      <div class="icon-group">
-        <img src="{{ url_for('static', filename='media/key_icon.png') }}">
-        <input class="form-control" type="password" name="password2" id="password2" placeholder="Confirm Password" required>
-      </div>
+            <div class="icon-group">
+                <img src="{{ url_for('static', filename='media/key_icon.png') }}">
+                <input class="form-control" type="password" name="password2" id="password2" placeholder="Confirm Password" required>
+            </div>
 
-      <h4 id='message'>{{message}}</h4>
+            <h4 id='message'>{{message}}</h4>
 
-      <div id="register-button">
-        <input class="btn btn-lg btn-primary" type="submit" id="btn-submit" value="Register">
-      </div>
-    </div>
-  </form>
+            <div id="register-button">
+                <input class="btn btn-lg btn-primary" type="submit" id="btn-submit" value="Register">
+            </div>
+        </div>
+    </form>
 </div>
 
+<!-- lower text -->
 <div id="sub-register">
-  <span>Already have an account? <a href='/login' id="register">Return to Login</a></span>
+    <span>Already have an account? <a href='/login' id="register">Return to Login</a></span>
+    <span>An account isn't required to use this site. <a href='/' id="home">Return to homepage</a></span>
 </div>
-
-
 
 {% endblock %}
