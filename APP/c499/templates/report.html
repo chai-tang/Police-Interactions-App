@@ -1,16 +1,15 @@
-<!-- include base template -->
 {% extends 'base.html' %}
 
-<!-- tab title -->
-{% block title %}Report Form{% endblock %}
+{% block header %}
 
-<!-- housekeeping -->
+{% endblock %}
+
+<!-- style -->
 {% block content %}
 <link rel="stylesheet" href="{{ url_for('static', filename='css/report.css') }}">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Heebo:wght@300&display=swap" rel="stylesheet">
-
 <body>
     <!-- navigation bar -->
     <header>
@@ -22,118 +21,67 @@
         <!-- links -->
         <nav>
             <ul class="header_bar">
-                <li><a href="/about">About</a></li>
-                <li><a href="/map">Incidents</a></li>
                 <li><a href="/report">Report</a></li>
-                {% if logged_in %}
-                <li><a href="/history">My History</a></li>
-                {% endif %}
+                <li><a href="/map">Incidents</a></li>
+                <li><a href="/about">About</a></li>
             </ul>
         </nav>
 
-        <!-- login/logout button -->
-        {% if logged_in %}
-        <a class="login_button" href="/logout">
-            <button>Logout</button>
-        </a>
-        {% else %}
+        <!-- login -->
         <a class="login_button" href="/login">
             <button>Login</button>
         </a>
-        {% endif %}
     </header>
 
-    <!-- content -->
     <div>
-        <h1>Incident Report</h1>
+        <h2>Incident Report</h2>
+        
 
-        <!-- report form -->
-        <form method="post" id="incident-report" enctype="multipart/form-data">
-            <div class="form-group">
-                <!-- text -->
-                <h3>Required</h3>
-                <label>Brief Description</label>
+            <form method="post" id="incident-report" enctype="multipart/form-data">
+                <div class="form-group">
+                    <h3>Required</h3>
+                    <div class="icon-group">
+                        <input class="form-control" type="text" name="description" placeholder="description of the incidident" required>
+                    </div>
+                    <div class="icon-group">
+                        <input type="text" name="latitude" id="latitude" required>
+                    </div>
+                    <div class="icon-group">
+                        <input type="text" name="longitude" id="longitude" required>
+                    </div>
+                    <h3>Additional Information</h3>
+                    <div class="icon-group">
+                        <input class="form-control" type="text" name="plates" placeholder="officer's license plate">
+                    </div>
+                    <div class="icon-group">
+                        <input class="form-control" type="text" name="name" placeholder="officer's name">
+                    </div>
+                    <div class="icon-group">
+                        <input class="form-control" type="text" name="badge" placeholder="officer's badge number">
+                    </div>
+                    <div class="icon-group">
+                        <input class="form-control" type="text" name="profile" placeholder="officer's description">
+                    </div>
+                    <div class="icon-group">
+                        <input class="form-control" type="text" name="time" placeholder="time">
+                    </div>
+                    <h3>Media</h3>
+                    <input class="form-control" type="file" name="files" accept="video/*,image/*" multiple>
 
-                <div class="icon-group">
-                    <input class="form-control" type="text" name="description" placeholder="add an incident description" required>
+                    <div id="submit-button" style="text-align:center;">
+                        <input class="button" type="submit" id="submit-button" value="Submit">
+                    </div>
                 </div>
-
-                <div class="icon-group">
-                    <input type="text" name="latitude" id="latitude" placeholder="select a location on the map or enter manually" required>
-                </div>
-
-                <div class="icon-group">
-                    <input type="text" name="longitude" id="longitude" placeholder="select a location on the map or enter manually" required>
-                </div>
-
-                <a id="map-link" href="/">double check location on map</a>
-
-                <h3>Extra</h3>
-
-                <label>Incident Type: (Hold shift or control to select multiple)</label>
-
-                <select id="incident-type" name="incident-type" multiple>
-                    <option value="N/A">N/A</option>
-                    <option value="Roadside Stop">Roadside Stop</option>
-                    <option value="Arrest">Arrest</option>
-                    <option value="Violent Interaction">Violent Interaction</option>
-                    <option value="Harassment">Harassment</option>
-                </select>
-
-                <label>Officer's License Plate</label>
-
-                <div class="icon-group">
-                    <input class="form-control" type="text" name="plates" placeholder="officer's license plate">
-                </div>
-
-                <label>Officer's Name</label>
-
-                <div class="icon-group">
-                    <input class="form-control" type="text" name="name" placeholder="officer's name">
-                </div>
-
-                <label>Officer's Badge Number</label>
-
-                <div class="icon-group">
-                    <input class="form-control" type="text" name="badge" placeholder="officer's badge number">
-                </div>
-
-                <label>Additional Information</label>
-
-                <div class="icon-group">
-                    <input class="form-control" type="text" name="profile" placeholder="notes">
-                </div>
-
-                <label>Time of Incident</label>
-
-                <div class="icon-group">
-                    <input class="form-control" type="text" name="time" placeholder="time">
-                </div>
-
-                <label>Private Description (Won't be displayed on the public map)</label>
-
-                <div class="icon-group">
-                    <input class="form-control" type="text" name="private-description" placeholder="add an private description">
-                </div>
-
-                <input class="form-control" type="file" name="files" accept="video/*,image/*" multiple>
-
-                <div id="submit-button" style="text-align:center;">
-                    <input class="button" type="submit" id="submit-button" value="Submit">
-                </div>
-            </div>
-        </form>
-
-        <script>var GET = {};
-            var queryString = window.location.search.replace(/^\?/, '');
-            queryString.split(/\&/).forEach(function (keyValuePair) {
-                var paramName = keyValuePair.replace(/=.*$/, ""); // some decoding is probably necessary
-                var paramValue = keyValuePair.replace(/^[^=]*\=/, ""); // some decoding is probably necessary
-                GET[paramName] = paramValue;
-            });
-            document.getElementById("latitude").value = GET["form/latitude"];
-            document.getElementById("longitude").value = GET["form/longitude"];
-        </script>
-    </div>
-</body>
-{% endblock %}
+            </form>
+            <script>var GET = {};
+                var queryString = window.location.search.replace(/^\?/, '');
+                queryString.split(/\&/).forEach(function (keyValuePair) {
+                    var paramName = keyValuePair.replace(/=.*$/, ""); // some decoding is probably necessary
+                    var paramValue = keyValuePair.replace(/^[^=]*\=/, ""); // some decoding is probably necessary
+                    GET[paramName] = paramValue;
+                });
+                document.getElementById("latitude").value = GET["form/latitude"];
+                document.getElementById("longitude").value = GET["form/longitude"];</script>
+        </div>
+    </body>
+    {% endblock %}

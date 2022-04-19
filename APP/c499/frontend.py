@@ -186,8 +186,7 @@ def home():
     # welcome_header='Hello, {}'.format(user.name) + ' Howdy'
 
     logged_in = 'logged_in' in session
-    message='Welcome back to iWitness,'
-    welcome_header='Click a location on the map to begin'
+    welcome_header='Welcome back to iWitness, a community ran safety database to report and archive local interactions with law enforcement. Click a location on the map to begin'
 
     # retrieve all reports to display on the home map
     all_reports = bn.get_all_reports()
@@ -202,7 +201,6 @@ def home():
     plates = []
     badge = []
     profile =[]
-    incident_type = []
     for report in all_reports:
         latitudes.append(report.latitude)
         longitudes.append(report.longitude)
@@ -214,9 +212,8 @@ def home():
         filenames = report.filenames.split(',')[0:-1]
         all_filenames.append(filenames)
         all_dates.append(report.date_time.strftime('%Y-%m-%d'))
-        incident_type.append(report.incident_type)
 
-    return render_template('index.html', message=message, welcome_header=welcome_header, logged_in=logged_in, report_count=report_count, latitudes=latitudes, longitudes=longitudes, descriptions=descriptions,plates=plates, name=name, badge=badge, profile=profile, all_filenames=all_filenames, all_dates=all_dates, incident_type=incident_type)
+    return render_template('index.html', welcome_header=welcome_header, logged_in=logged_in, report_count=report_count, latitudes=latitudes, longitudes=longitudes, descriptions=descriptions,plates=plates, name=name, badge=badge, profile=profile, all_filenames=all_filenames, all_dates=all_dates)
 
 @app.route('/profile')
 @authenticate
@@ -233,7 +230,6 @@ def allowed_file(filename):
 def report():
      
     message = 'Upload your incident details below'
-    logged_in = 'logged_in' in session
 
     if request.method == 'POST':
         # get the user's form inputs
@@ -244,11 +240,6 @@ def report():
         name = request.form.get('name')
         badge = request.form.get('badge')
         profile = request.form.get('profile')
-        incident_type_list = request.form.getlist('incident-type')
-        incident_type = ""
-        for i in incident_type_list:
-            incident_type += i + ', '
-        private_description = request.form.get('private-description')
 
         valid = True
         # verify that the form inputs are valid
@@ -305,15 +296,14 @@ def report():
             filenamestr = ""
             for file in filenames:
                 filenamestr = filenamestr + file + ','
-            bn.upload_report(user_id,description,longitude,latitude,plates,name,badge,profile,filenamestr,incident_type,private_description)
+            bn.upload_report(user_id,description,longitude,latitude,plates,name,badge,profile,filenamestr)
             message = "Report uploaded successfully"
     
-    return render_template('report.html', message=message, logged_in=logged_in)
+    return render_template('report.html', message=message)
 
 @app.route('/map')
 def map():
-    message = "Incidents are listed chronologically"
-    logged_in = 'logged_in' in session
+    message = "View all incident reports below"
 
     all_reports = bn.get_all_reports()
 
@@ -324,7 +314,7 @@ def map():
         filenames = report.filenames.split(',')[0:-1]
         all_filenames.append(filenames)
 
-    return render_template('map.html', logged_in=logged_in, message=message, all_reports=all_reports, all_filenames=all_filenames)
+    return render_template('map.html', message=message, all_reports=all_reports, all_filenames=all_filenames)
 
 @app.route('/uploads/<path:filename>')
 def download_file(filename):
@@ -332,29 +322,12 @@ def download_file(filename):
 
 @app.route('/about')
 def about():
-    logged_in = 'logged_in' in session
-    return render_template('about.html',logged_in=logged_in)
+    return render_template('about.html')
 
 @app.route('/history')
 @authenticate
 def history(user):
-    message = "Your incident history"
-    logged_in = 'logged_in' in session
-
-    all_reports = bn.get_user_reports(user)
-
-    if all_reports.count() < 1:
-        message = "You haven't uploaded any incident reports, but once you do they'll show up here."
-
-    # compile the filenames into lists, then put those lists into a list
-    # each subarray has index equal to the report id that uploaded it
-    all_filenames = []
-    for report in all_reports:
-        filenames = report.filenames.split(',')[0:-1]
-        all_filenames.append(filenames)
-
-    return render_template('history.html', logged_in=logged_in, user=user, message=message, all_reports=all_reports, all_filenames=all_filenames)
-
+    return render_template('history.html', user=user)
 
 @app.route('/settings')
 @authenticate
